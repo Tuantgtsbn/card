@@ -1,0 +1,22 @@
+.listCard {
+  max-width: 1300px;
+  padding: 0 16px;
+  gap: 1rem;
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(2, minmax(160px, 260fr));
+  margin: 48px auto;
+  //   justify-self: center;
+}
+
+@media only screen and (min-width: 1024px) {
+  .listCard {
+    padding: 0 32px;
+    grid-template-columns: repeat(4, minmax(160px, 260px));
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .listCard {
+    grid-template-columns: repeat(5, minmax(160px, 260px));
+  }
+}

@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { Breadcrumb, Structure } from "@/components/Breadcrumb/Breadcrumb";
 import HeadingBanner from "@/components/HeadingBanner/HeadingBanner";
 import FilterContent from "@/components/Filter/FilterContent";
@@ -7,18 +8,48 @@ import { LiaSlidersHSolid } from "react-icons/lia";
 import { IoMdClose } from "react-icons/io";
 import { getCards } from "@/apis/cardService";
 import Pagination from "@/components/Pagination/Pagination";
-
 import CardItem from "@/components/CardItem/CardItem";
 import Loading from "@/components/Loading/Loading";
-import { set } from "react-hook-form";
-function ListCardPage({ title }) {
+function ListCardPage() {
     console.log('re-render')
     const location = useLocation();
     const typeOfCard = location.pathname.split('/')[2];
-    console.log(typeOfCard);
+    const checkValidType = (() => {
+        switch (typeOfCard) {
+            case 'birthday':
+                return 'Birthday cards';
+            case 'anniversary':
+                return 'Anniversary cards';
+            case 'thank-you':
+                return 'Thank you cards';
+            case 'getwell':
+                return 'Get well cards';
+            case 'goodluck':
+                return 'Good luck cards';
+            case 'love':
+                return 'Love & romance cards';
+            case 'baby':
+                return 'New baby cards';
+            case 'sympathy':
+                return 'Sympathy cards';
+            case 'valentine':
+                return 'Valentine cards';
+            case 'wedding':
+                return 'Wedding cards';
+            default:
+                return false;
+        }
+    })();
+
+    document.title = checkValidType;
+    // console.log(typeOfCard);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
 
+    if (!checkValidType) {
+        return <Navigate to='404' replace />
+
+    }
     const [isLoading, setIsLoading] = useState(false);
     const validField = ['color', 'price', 'sortBy', 'page'];
     const [filter, setFilter] = useState(
@@ -92,7 +123,7 @@ function ListCardPage({ title }) {
     return (
         <div className="mx-4 lg:mx-8">
             <Breadcrumb items={[Structure['home'], Structure['cards'], { ...Structure['cards'].children[typeOfCard], active: false }]} />
-            <HeadingBanner title={title} description="Choose a card to send to your loved ones" config={handleBgTheme(typeOfCard)} />
+            <HeadingBanner title={checkValidType} description="Choose a card to send to your loved ones" config={handleBgTheme(typeOfCard)} />
             <div className="relative">
                 {/* Mobile Filter Button */}
                 <div className="lg:hidden mb-4">

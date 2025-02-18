@@ -18,11 +18,12 @@ function PreviewCardPage() {
     const [relatedCards, setRelatedCards] = useState([]);
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    useLayoutEffect(() => {
+
+    document.title = chooseCard ? chooseCard.name : 'Preview Card';
+    useEffect(() => {
         const id = window.location.pathname.split('/')[4];
         if (!chooseCard || chooseCard._id !== id) {
             getCardById(id).then(res => {
-                // document.title = res.data.data.name;
                 setChooseCard(res.data.data);
                 findRelatedCards(id).then(res => {
                     setRelatedCards(res.data.data);

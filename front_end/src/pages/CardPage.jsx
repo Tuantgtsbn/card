@@ -14,16 +14,16 @@ import { Breadcrumb, Structure } from "@/components/Breadcrumb/Breadcrumb";
 import classNames from "classnames";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 function CardPage() {
-    const { pathname } = useLocation();
+    // const { pathname } = useLocation();
     const { listCard } = styles;
-    const isCardPage = pathname === '/cards';
+
     const navigate = useNavigate();
     const handleClick = (path) => {
         navigate(path);
     }
     return (
 
-        isCardPage ? (<>
+        <>
             <h1 className="text-[56px] md:text-[80px] font-[500] text-center">
                 <span className="text-thirdColor mr-2 ">Card</span>
                 <span className="text-mainColor">Marker</span>
@@ -65,7 +65,7 @@ function CardPage() {
 
                 </div>
             </div>
-        </>) : <Outlet />
+        </>
 
     );
 }

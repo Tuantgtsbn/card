@@ -3,7 +3,9 @@ import Footer from "@/components/Footer/Footer";
 import { useEffect } from "react";
 function DefaultLayout({ title, children }) {
     useEffect(() => {
-        document.title = title;
+        if (title) {
+            document.title = title;
+        }
     }, [title]);
     return (
         <div className="relative">

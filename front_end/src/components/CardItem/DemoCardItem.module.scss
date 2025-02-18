@@ -1,0 +1,14 @@
+.cardItem::before {
+  content: '';
+  position: absolute;
+  height: 10px;
+  top: -4px;
+  transform: rotate(-4deg);
+  background: #a6a9ab;
+  border-top-right-radius: 4px;
+  background-repeat: no-repeat;
+  box-shadow: none;
+  z-index: -1;
+  left: 3px;
+  right: 10px;
+}

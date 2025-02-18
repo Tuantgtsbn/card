@@ -84,7 +84,7 @@ export const Breadcrumb = ({ items, className }) => {
                     items.map((item, index) => {
                         return (
                             <div key={index} className="flex">
-                                {item.active ? <Link to={item.link} className="text-gray-500 hover:text-black">{item.name}</Link> : <span className="text-black font-semibold">{item.name}</span>}
+                                {item.active ? <Link to={item.link} className="text-gray-500 hover:text-black capitalize">{item.name}</Link> : <span className="text-black font-semibold">{item.name}</span>}
                                 {index < items.length - 1 && <span className="mx-2">&gt;</span>}
                             </div>
                         )

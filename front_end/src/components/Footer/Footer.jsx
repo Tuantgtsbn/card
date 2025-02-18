@@ -1,7 +1,7 @@
 import Logo from '/images/homepage/Logo.png';
 function Footer() {
     return (
-        <div className='flex flex-col justify-center mt-[64px]'>
+        <div className='flex flex-col justify-center mt-[64px] bg-gray-200'>
             <img src={Logo} alt="" className='h-[57px] object-contain' loading='lazy' />
             <div className='text-center'>
                 <p>©Happy card 2025. All rights reserved.</p>

@@ -1,14 +1,28 @@
-.cardItem::before {
-  content: '';
-  position: absolute;
-  height: 10px;
-  top: -4px;
-  transform: rotate(-4deg);
-  background: #a6a9ab;
-  border-top-right-radius: 4px;
-  background-repeat: no-repeat;
-  box-shadow: none;
-  z-index: -1;
-  left: 3px;
-  right: 10px;
+.wrapper {
+    position: relative;
+    &:hover {
+        img {
+            border: 2px solid #000;
+        }
+    }
+}
+.wrapper::before {
+    content: '';
+    display:block;
+    height: 24px;
+    transform: rotate(-2deg);
+    position: absolute;
+    left: 4px;
+    right: 11px;
+    top: -6px;
+    background-color: #e9e9ea;
+    border-top-right-radius: 4px;
+    
+}
+.wrapper:hover::before {
+    background-color: black;
+}
+.cardItem {
+    position: relative;
+    
 }

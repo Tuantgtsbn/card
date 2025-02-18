@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 function Button({ varriant = 'primary', children, className, size = 'md', ...props }) {
-    const baseStyles = 'py-2 px-4 font-semibold text-white bg-black';
+    const baseStyles = 'py-2 px-4 font-semibold text-black bg-gray-200';
     const varriantStyles = {
         'primary': 'rounded',
         'secondary': 'rounded-full'

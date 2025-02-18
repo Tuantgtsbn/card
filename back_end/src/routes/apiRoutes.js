@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const apiControllers = require('../controllers/apiControllers');
+const validateObjectId = require('../middlewares/validateObjectId');
+const authenticateToken = require('../middlewares/auth');
+router.get('/card', apiControllers.searchCard);
+// router.get('/card', apiControllers.createCard);
+router.get('/card/:id', apiControllers.getCardById);
+router.get('/card/:id/view', apiControllers.updateViewsOfCard);
+router.get('/card/:id/like', authenticateToken, apiControllers.updateLikesOfCard);
+router.get('/findRelatedCards', apiControllers.findRelatedCards);
+module.exports = router;

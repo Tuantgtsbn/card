@@ -1,13 +1,47 @@
-import classNames from "classnames";
 import styles from "./CardItem.module.scss";
-function CardItem({ title, img, className, ...props }) {
-    const { cardItem } = styles;
+import classNames from "classnames";
+import Button from "../Button/Button";
+import { FaRegHeart } from "react-icons/fa";
+import { PiCrown } from "react-icons/pi";
+import { likeCard } from "@/apis/cardService";
+import { useContext, useState } from "react";
+import { CardContext } from "@/contexts/CardProvider";
+import { AppContext } from "@/contexts/AppProvider";
+import { ToastContext } from "@/contexts/ToastContext";
+import { useNavigate } from "react-router-dom";
+function CardItem({ data, onClick, ...props }) {
+    const navigate = useNavigate();
+    const { likes, views, slug, name, isFree, imgs, _id, likedBy } = data;
+    const { chooseCard, setChooseCard } = useContext(CardContext);
+    const { isLogin, userInfor } = useContext(AppContext);
+    const { toast } = useContext(ToastContext);
+    const { cardItem, wrapper } = styles;
+    const [isLiked, setIsLiked] = useState(() => {
+        if (!isLogin) return false;
+        return likedBy?.includes(userInfor._id);
+    })
+    const handleClickHeartIcon = (e) => {
+        e.stopPropagation();
+        likeCard(_id).then(res => {
+            setIsLiked(res.data.hasLiked);
+        }).catch(err => toast.error('Please login'));
+    }
+    const handleClickCard = () => {
+        setChooseCard(data);
+        navigate(`/preview/cards/${slug}/${_id}`);
+    }
     return (
-        <div {...props} className={classNames("rounded-xl px-3 py-4 text-center hover:bg-thirdColor", className)}>
-            <div className={classNames("w-[126px] h-[184px] mx-auto relative z-[2]", cardItem)}>
-                <img src={img} alt="" loading="lazy" className="rounded-[4px] border border-solid border-yellow-300 h-full" />
+        <div className={classNames(wrapper)} onClick={handleClickCard}>
+            <div className={classNames(cardItem, '')}>
+                <img src={imgs[0]} alt="" className='rounded-lg w-full object-cover' />
+                {!isFree && <Button varriant="secondary" className='absolute top-0 left-0 m-2 !p-2 2xl:!p-3 bg-purple-500' ><PiCrown /></Button>}
+                <Button onClick={handleClickHeartIcon} varriant="secondary" className={classNames('absolute top-0 right-0 m-2 !p-2 2xl:!p-3 bg-gray-400 ', {
+                    '!bg-red-600': Boolean(isLiked)
+                })}>
+                    <FaRegHeart />
+                </Button>
             </div>
-            <p className="font-semibold mt-4" style={{ letterSpacing: '.7px' }}>{title}</p>
+            <p className="py-2 px-1">{name}</p>
         </div>
     );
 }

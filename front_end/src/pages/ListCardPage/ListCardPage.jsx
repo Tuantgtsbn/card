@@ -1,14 +1,70 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Breadcrumb, Structure } from "@/components/Breadcrumb/Breadcrumb";
 import HeadingBanner from "@/components/HeadingBanner/HeadingBanner";
 import FilterContent from "@/components/Filter/FilterContent";
 import { LiaSlidersHSolid } from "react-icons/lia";
 import { IoMdClose } from "react-icons/io";
+import { getCards } from "@/apis/cardService";
+import Pagination from "@/components/Pagination/Pagination";
+
+import CardItem from "@/components/CardItem/CardItem";
+import Loading from "@/components/Loading/Loading";
+import { set } from "react-hook-form";
 function ListCardPage({ title }) {
+    console.log('re-render')
     const location = useLocation();
     const typeOfCard = location.pathname.split('/')[2];
+    console.log(typeOfCard);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const [isLoading, setIsLoading] = useState(false);
+    const validField = ['color', 'price', 'sortBy', 'page'];
+    const [filter, setFilter] = useState(
+        () => validField.reduce((acc, field) => {
+            if (searchParams.get(field)) {
+                return {
+                    ...acc,
+                    [field]: searchParams.get(field)
+                }
+            }
+            return acc;
+        }, { type: typeOfCard, page: 1 })
+    );
+    console.log(filter);
+    const copyFilter = useMemo(() => ({ ...filter }), [filter]);
+    const [cards, setCards] = useState([]);
+    const [pagination, setPagination] = useState({});
+
+    const handlePageChange = (newPage) => {
+        setFilter({
+            ...filter,
+            page: newPage
+        })
+    }
+    const handleClickApply = useCallback((newFilter) => {
+        setFilter(newFilter);
+    }, []);
+    const handleFetchData = () => {
+        const { type, ...other } = filter;
+        console.log("other", other);
+        setIsLoading(true);
+        getCards(filter).then(
+            res => {
+                setIsLoading(false);
+                console.log(searchParams.keys());
+                setSearchParams(other);
+
+                setCards(res.data.cards);
+                setPagination(res.data.pagination);
+            }
+        ).catch(err => (console.log(err)));
+
+    };
+    useEffect(() => {
+        handleFetchData();
+    }, [filter]);
     const handleBgTheme = (type) => {
         switch (type) {
             case 'birthday':
@@ -21,9 +77,9 @@ function ListCardPage({ title }) {
                 return ['#ffeef3', '/images/cards/getwell/theme/banners/getwell-desktop.svg', '/images/cards/getwell/theme/banners/getwell-mobile.svg'];
             case 'goodluck':
                 return ['#f4eefd', '/images/cards/goodluck/theme/banners/goodluck-desktop.svg', '/images/cards/goodluck/theme/banners/goodluck-mobile.svg'];
-            case 'love-romance':
+            case 'love':
                 return ['#ffeef3', '/images/cards/love-romance/theme/banners/love-romance-desktop.svg', '/images/cards/love-romance/theme/banners/love-romance-mobile.svg'];
-            case 'newbaby':
+            case 'baby':
                 return ['#edf9fb', '/images/cards/newbaby/theme/banners/baby-desktop.svg', '/images/cards/newbaby/theme/banners/baby-mobile.svg'];
             case 'sympathy':
                 return ['#ffeef3', '/images/cards/sympathy/theme/banners/sympathy-desktop.svg', '/images/cards/sympathy/theme/banners/sympathy-mobile.svg'];
@@ -37,7 +93,7 @@ function ListCardPage({ title }) {
         <div className="mx-4 lg:mx-8">
             <Breadcrumb items={[Structure['home'], Structure['cards'], { ...Structure['cards'].children[typeOfCard], active: false }]} />
             <HeadingBanner title={title} description="Choose a card to send to your loved ones" config={handleBgTheme(typeOfCard)} />
-            <div className="container relative">
+            <div className="relative">
                 {/* Mobile Filter Button */}
                 <div className="lg:hidden mb-4">
                     <button
@@ -71,7 +127,7 @@ function ListCardPage({ title }) {
                             </button>
                         </div>
 
-                        <FilterContent />
+                        <FilterContent state={{ filter: copyFilter, onClick: handleClickApply }} />
                     </aside>
 
                     {/* Overlay for Mobile */}
@@ -84,14 +140,29 @@ function ListCardPage({ title }) {
 
                     {/* Main Content */}
                     <main className="flex-1">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {/* Sample Product Cards */}
-                            {Array.from({ length: 6 }).map((_, index) => (
-                                <div key={index} className="aspect-square bg-gray-100 rounded flex items-center justify-center">
-                                    Sản phẩm {index + 1}
-                                </div>
-                            ))}
-                        </div>
+                        {
+                            isLoading ? <Loading /> : (
+                                <>
+                                    <p className="mb-4">{pagination.total} designs</p>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 justify-center">
+                                        {/* Sample Product Cards */}
+                                        {
+                                            cards.map((card, index) => {
+                                                return (
+                                                    <div key={index} className="aspect-square bg-gray-100 rounded flex items-center justify-center">
+                                                        <CardItem data={card} />
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+
+                                    {/* Pagination */}
+                                    <Pagination pagination={pagination} onPageChange={handlePageChange} />
+                                </>
+
+                            )
+                        }
                     </main>
                 </div>
             </div>

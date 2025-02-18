@@ -7,7 +7,7 @@
           right: 0;
           bottom: 0;
 }
-.checkbox:hover::before {
+.checkbox::before {
           content: '';
           position: absolute;
           width: 30px;
@@ -16,4 +16,8 @@
           left: -3px;
           border: 1.5px solid #000;
           border-radius: 100%;
+          display: none;
+}
+input:checked + .checkbox::before, .checkbox:hover::before {
+          display: block;
 }

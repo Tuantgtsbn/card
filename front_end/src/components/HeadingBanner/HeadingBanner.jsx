@@ -4,7 +4,7 @@ import styles from "./HeadingBanner.module.scss";
 function HeadingBanner({ title, description, config, className }) {
     return (
 
-        <div className={classNames('rounded-3xl font-[500] lg:bgTheme max-lg:!bg-none', className)} style={{ backgroundImage: `url(${config[1]})`, backgroundColor: `${config[0]}` }}>
+        <div className={classNames('mb-8 rounded-3xl font-[500] lg:bgTheme max-lg:!bg-none', className)} style={{ backgroundImage: `url(${config[1]})`, backgroundColor: `${config[0]}` }}>
             <div className="pl-6">
                 <h2 className="text-[32px] pt-6 pb-2">{title}</h2>
                 <h3 className="text-[14px] pb-2 lg:pb-10">{description}</h3>

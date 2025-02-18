@@ -44,13 +44,13 @@ export const routers = [
             },
             {
                 title: 'Love & Romance Cards',
-                path: 'love-romance',
+                path: 'love',
                 component: lazy(() => import('@/pages/ListCardPage')),
                 layout: lazy(() => import('@/layouts/SecondaryLayout'))
             },
             {
                 title: 'New Baby Cards',
-                path: 'newbaby',
+                path: 'baby',
                 component: lazy(() => import('@/pages/ListCardPage')),
                 layout: lazy(() => import('@/layouts/SecondaryLayout'))
             },
@@ -74,6 +74,27 @@ export const routers = [
             }
         ]
     },
+    {
+        path: 'preview/cards/:name/:id',
+        title: 'Preview Card',
+        component: lazy(() => import('@/pages/PreviewCardPage')),
+        layout: lazy(() => import('@/layouts/DefaultLayout'))
+    }
+    ,
+    {
+        path: '/about',
+        title: 'About Us',
+        component: lazy(() => import('@/pages/AboutPage')),
+        layout: lazy(() => import('@/layouts/DefaultLayout'))
+    }
+    ,
+    {
+        path: '/contact',
+        title: 'Contact',
+        component: lazy(() => import('@/pages/ContactPage')),
+        layout: lazy(() => import('@/layouts/DefaultLayout'))
+    }
+    ,
     {
         path: '*',
         title: '404 Not Found',
